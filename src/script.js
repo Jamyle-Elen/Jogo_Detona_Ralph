@@ -54,9 +54,31 @@ function addListenerHitBox() {
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
         playSound("hit");
+      } else {
+        loseChance();
       }
     });
   });
+
+  document.addEventListener("mousedown", (event) => {
+    const isSquareClicked = state.view.squares.some((square) =>
+      square.contains(event.target)
+    );
+    if (!isSquareClicked) {
+      loseChance();
+    }
+  });
+}
+
+function loseChance() {
+  state.values.curretTime--; // Reduz o tempo (ou vidas, se preferir)
+  state.view.timeLeft.textContent = state.values.curretTime;
+
+  if (state.values.curretTime <= 0) {
+    clearInterval(state.actions.countDownTimerId);
+    clearInterval(state.actions.timerId);
+    alert("Game Over! O seu resultado foi: " + state.values.result);
+  }
 }
 
 function initialize() {
